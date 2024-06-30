@@ -736,7 +736,7 @@ cTexture* cInterfaceRenderDevice::GetLightMap() {
     return nullptr;
 }
 
-#ifdef PERIMETER_DEBUG
+#ifdef D3D9_VISUAL_DEBUGGER
 void cInterfaceRenderDevice::StartCaptureFrame() {
 }
 #endif

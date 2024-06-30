@@ -52,6 +52,10 @@
 #include <c/gamepix.h>
 #endif
 
+#ifdef D3D9_VISUAL_DEBUGGER
+#include "FrameDebugWindow.h"
+#endif
+
 int terShowFPS = 0;
 
 CShellIconManager   _shellIconManager;
@@ -1035,6 +1039,10 @@ Vect2i GameShell::convertToScreenAbsolute(const Vect2f& pos)
 }
 
 void GameShell::EventHandler(SDL_Event& event) {
+#ifdef D3D9_VISUAL_DEBUGGER
+	FrameDebugWindow::Get().HandleEvent(&event);
+#endif
+
     if (reelManager.isVisible()) {
         if (reelAbortEnabled) {
             switch (event.type) {
@@ -1355,11 +1363,20 @@ bool GameShell::DebugKeyPressed(sKey& Key)
 		break;
 
 	case VK_F6:
+#ifdef D3D9_VISUAL_DEBUGGER
+		if (isShiftPressed()) {
+			FrameDebugWindow::Get().Toggle();
+			break;
+		}
+#else
+
 #ifdef PERIMETER_DEBUG
 		if (isShiftPressed()) {
 			terRenderDevice->StartCaptureFrame();
 			break;
 		}
+#endif
+
 #endif
 		terRenderDevice->Flush(true);
         SDL_ShowCursor(SDL_TRUE);
@@ -1687,10 +1704,18 @@ void GameShell::KeyPressed(sKey& Key)
 			MakeShot();
 			break;
 
+#ifdef D3D9_VISUAL_DEBUGGER
+		case VK_F6 | KBD_SHIFT:
+			FrameDebugWindow::Get().Toggle();
+			break;
+#else
+
 #ifdef PERIMETER_DEBUG
 		case VK_F6 | KBD_SHIFT:
 			terRenderDevice->StartCaptureFrame();
 			break;
+#endif
+
 #endif
 	}
 

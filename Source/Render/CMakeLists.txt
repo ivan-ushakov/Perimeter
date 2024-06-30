@@ -67,6 +67,21 @@ IF (OPTION_D3D9)
             d3dx9/d3dx9.cpp
         )
     ENDIF()
+
+    if(OPTION_D3D9_VISUAL_DEBUGGER)
+        include_directories(${imgui_SOURCE_DIR})
+        include_directories(${imgui_SOURCE_DIR}/backends)
+
+        set(Render_SRCS ${Render_SRCS}
+            src/FrameDebugWindow.cpp
+            ${imgui_SOURCE_DIR}/imgui.cpp
+            ${imgui_SOURCE_DIR}/imgui_draw.cpp
+            ${imgui_SOURCE_DIR}/imgui_tables.cpp
+            ${imgui_SOURCE_DIR}/imgui_widgets.cpp
+            ${imgui_SOURCE_DIR}/backends/imgui_impl_dx9.cpp
+            ${imgui_SOURCE_DIR}/backends/imgui_impl_win32.cpp
+        )
+    endif()
 ENDIF()
 
 add_library(Render STATIC ${Render_SRCS})

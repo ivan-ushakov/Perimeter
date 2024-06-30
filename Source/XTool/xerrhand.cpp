@@ -40,11 +40,11 @@ static const char *rterrorMSG	= "RUN-TIME ERROR";
 XErrorHandler ErrH;
 
 void setSignalHandler(sighandler signalHandler) {
-    signal(SIGSEGV, signalHandler);
-    signal(SIGABRT, signalHandler);
-    signal(SIGFPE, signalHandler);
-    signal(SIGILL, signalHandler);
-    signal(SIGTERM, signalHandler);
+    // signal(SIGSEGV, signalHandler);
+    // signal(SIGABRT, signalHandler);
+    // signal(SIGFPE, signalHandler);
+    // signal(SIGILL, signalHandler);
+    // signal(SIGTERM, signalHandler);
 #ifdef SIGBUS //UNIX specific
     signal(SIGBUS, signalHandler);
 #endif

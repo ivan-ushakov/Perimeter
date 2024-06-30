@@ -20,18 +20,20 @@ OPTION(OPTION_FINAL_VERSION "Generate Final version" ON)
 OPTION(OPTION_STATIC_BUILD "Generate static build" OFF)
 OPTION(OPTION_STATIC_LIB_STD "Statically link to libstd++" ON)
 OPTION(OPTION_CHECK_SCRIPTS "Check game scripts with XPrm" OFF)
-OPTION(OPTION_DISABLE_STACKTRACE "Disable stacktrace support" OFF)
+OPTION(OPTION_DISABLE_STACKTRACE "Disable stacktrace support" ON)
 OPTION(OPTION_LINKER "Use specified linker instead of default" "")
 OPTION(OPTION_DEBUG_ASSERT "Enable debug assertions" OFF)
 OPTION(OPTION_GPERFTOOLS "Link executable with gperftools for debugging" OFF)
 OPTION(OPTION_D3D9 "Enable D3D9 renderer using dxvk in *nix or DirectX in Windows" ON)
 OPTION(OPTION_LINK_LIBS "Link executables with provided libraries, placed before the rest" "")
 OPTION(OPTION_LINK_LIBS_POST "Link executables with provided libraries, placed after the rest" "")
-OPTION(OPTION_SOKOL "Enable Sokol GFX based renderer" ON)
+OPTION(OPTION_SOKOL "Enable Sokol GFX based renderer" OFF)
 OPTION(OPTION_FFMPEG_MOVIES "Use FFMPEG to decode ingame movies" ON)
 OPTION(OPTION_ASAN "Enable AddressSanitizer" OFF)
 OPTION(OPTION_SANITIZE "Pass -fsanitizer" OFF)
 OPTION(OPTION_O0 "Disable optimizations" OFF)
+OPTION(OPTION_IMGUI "Enable Dear ImGui GUI library" OFF)
+OPTION(OPTION_D3D9_VISUAL_DEBUGGER "Enable D3D9 visual debugger" OFF)
 
 # Compiler detections
 SET(MSVC_CL_BUILD OFF)
@@ -439,6 +441,31 @@ IF(NOT PERIMETER_WINDOWS)
             "${PROJECT_SOURCE_DIR}/Source/Exodus"
             "${pevents_SOURCE_DIR}/src"
     )
+ENDIF()
+
+if(MSVC)
+    ADD_COMPILE_OPTIONS(
+        $<$<CONFIG:>:/MT> #---------|
+        $<$<CONFIG:Debug>:/MTd> #---|-- Statically link the runtime libraries
+        $<$<CONFIG:Release>:/MT> #--|
+    )
+ENDIF()
+
+IF(OPTION_IMGUI)
+    MESSAGE("Dear ImGui: enabled")
+
+    #Dear ImGui v1.90.8
+    FetchContent_Declare(imgui
+        GIT_REPOSITORY    https://github.com/ocornut/imgui.git
+        GIT_TAG           "6f7b5d0ee2fe9948ab871a530888a6dc5c960700"
+        GIT_SHALLOW       ON
+    )
+    FetchContent_MakeAvailable(imgui)
+
+    IF(OPTION_D3D9_VISUAL_DEBUGGER)
+        MESSAGE("Visual debugger: enabled")
+        ADD_DEFINITIONS(-DD3D9_VISUAL_DEBUGGER)
+    ENDIF()
 ENDIF()
 
 #This is the only way I know to force download of external project from any targets

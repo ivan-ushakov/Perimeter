@@ -1,5 +1,5 @@
 
-OPTION(OPTION_PROCESS_SHADERS "Re-Process game shaders" OFF)
+OPTION(OPTION_PROCESS_SHADERS "Re-Process game shaders" ON)
 
 #Include Sokol
 FetchContent_Declare(sokol
@@ -90,7 +90,7 @@ if (MACOS)
     endif()
 elseif(PERIMETER_WINDOWS)
     if(NOT OPTION_SOKOL_API)
-        set(OPTION_SOKOL_API "D3D11")
+        set(OPTION_SOKOL_API "GLCORE")
     endif ()
     if(OPTION_SOKOL_API MATCHES "D3D11")
         message("Sokol API: DirectX 11")

@@ -1,4 +1,4 @@
-add_library(UserInterface STATIC
+SET(UserInterface_SRCS
         BGScene.cpp
         chaos.cpp
         controls.cpp
@@ -43,6 +43,17 @@ add_library(UserInterface STATIC
         OptionsMenu.cpp
         Menu/MultiplayerCommon.cpp
 )
+
+if(OPTION_D3D9_VISUAL_DEBUGGER)
+        include_directories(${imgui_SOURCE_DIR})
+        include_directories(${imgui_SOURCE_DIR}/backends)
+
+        set(UserInterface_SRCS ${UserInterface_SRCS}
+            ${imgui_SOURCE_DIR}/backends/imgui_impl_sdl2.cpp
+        )
+endif()
+
+add_library(UserInterface STATIC ${UserInterface_SRCS})
 
 target_include_directories(UserInterface PRIVATE
         "${PROJECT_SOURCE_DIR}/Source/XTool"

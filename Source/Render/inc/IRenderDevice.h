@@ -335,7 +335,7 @@ public:
     virtual cTexture* GetShadowMap() = 0;
     virtual cTexture* GetLightMap() = 0;
 
-#ifdef PERIMETER_DEBUG
+#ifdef D3D9_VISUAL_DEBUGGER
     virtual void StartCaptureFrame();
 #endif
 };
